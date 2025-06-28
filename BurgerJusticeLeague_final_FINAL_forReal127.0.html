@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Burger Justice League</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet"/>
+<style>
+    body {
+      margin: 0;
+      font-family: 'Press Start 2P', cursive;
+      background: radial-gradient(circle at top, #1f1f1f, #0f0f0f);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 { font-size: 2rem; color: #feca1b; text-shadow: 2px 2px #000; }
+    #burgerCount, #bps { font-size: 1.25rem; color: #00ffcc; }
+    .clicker-btn {
+      background-color: #ff3860;
+      border: none;
+      padding: 20px 40px;
+      margin: 20px;
+      font-size: 1.2rem;
+      border-radius: 15px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff3860;
+    }
+    .section {
+      margin: 30px auto;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+    .hero-card {
+      display: inline-block;
+      background: #222;
+      color: #fff;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+      width: 200px;
+      vertical-align: top;
+      box-shadow: 0 0 10px rgba(0,255,255,0.3);
+    }
+    .hero-card button {
+      background: #00adb5;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+    .lore-button {
+      background: linear-gradient(135deg, gold, orange);
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px gold;
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: linear-gradient(to bottom right, #ffffff, #fceabb);
+      color: #222;
+      border: 3px solid gold;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 500px;
+      font-family: sans-serif;
+      text-align: left;
+    }
+    .chatbox {
+      font-size: 0.8rem;
+      color: #ccc;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 10px;
+      font-family: monospace;
+    }
+    #achievementPopup {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffcb05;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      box-shadow: 0 0 10px black;
+      color: black;
+      z-index: 1100;
+    }
+  </style>
+</head>
+<body>
+<h1>🍔 Burger Justice League</h1><div class="chatbox"><strong>Irony Man:</strong> <span id="chatline">Welcome to the League, rookie.</span></div>
+<p>Burgers: <span id="burgerCount">0</span></p>
+<button class="clicker-btn" id="clickBurger">🍔 Click Me!</button>
+<p>Burgers per Second: <span id="bps">0</span></p>
+<p id="comboDisplay" style="color: #ff66cc; font-size: 1.2rem; margin-top: -10px;">Combo: 0</p>
+<div class="section" id="heroShop">
+<div id="achievementCounter" style="margin-bottom: 10px; font-weight: bold; color: #fff;">Achievements: 0 / 0</div>
+<h2>Hero Shop</h2>
+</div>
+<div class="section">
+<button class="lore-button" id="showLore">📜 Show Lore</button>
+</div>
+<div class="modal-overlay" id="loreOverlay">
+<div class="modal-content">
+<h2>📜 League Lore</h2>
+<ul>
+<li>🕷 Arachnid Lad: Bitten by a radioactive wrapper behind a dumpster at Burger Boy HQ. Can swing between fryers using ketchup lines and smells permanently of onion rings. Fights crime and clogged grease traps with equal enthusiasm.</li>
+<li>⚡ Thore: Demigod of scattered thunderstorms and ergonomic mattress discounts. Hurls lightning patties, brings rain to dry buns, and moonlights as a chiropractor for Norse mascots. Loves protein shakes and Norse mythology TikToks.</li>
+<li>🛠 Irony Man: Billion-dollar startup bro turned vigilante after his app to rate fast food workers got 1-star bombed. Built his armor from recycled Yelp reviews and sarcasm. Speaks only in quotes from disgruntled customers.</li>
+<li>🚚 Optimus Subprime: Cybertruck dropout turned taco-truck overlord. Transforms into a food truck that only plays 80s synthwave. Leader of the Cravetrons, he delivers spicy justice in 30 minutes or less or vengeance is free.</li>
+<li>🦖 Compy Comrade: Tiny dinosaur, massive manifesto. Founded the “United Fryworkers of Pangea.” Believes all burgers belong to the proletariat, but keeps a private stash of golden patties for the Central Grill Committee.</li>
+<li>☠️ The Purple Inconvenience: A misunderstood intern from the Multiverse of Meal Preppers. Claims he was “inevitably correct” about portion control. Snapped half the fries out of existence because the drive-thru line was too long.</li>
+</ul>
+<button onclick="document.getElementById('loreOverlay').style.display='none'">❌ Close</button>
+</div>
+<div class="section">
+<button class="lore-button" onclick="togglePickleShop()">🥒 Pickle Coin Shop</button>
+</div>
+<div class="modal-overlay" id="pickleShopOverlay">
+<div class="modal-content">
+<h2>🥒 Pickle Coin Shop</h2>
+<ul style="list-style:none; padding: 0;">
+<li><button onclick="buyPickleUpgrade('bpsBoost')">Pickle Juice (1 🥒) - +10% BPS</button></li>
+<li><button onclick="buyPickleUpgrade('comboBoost')">Crispy Combo (2 🥒) - Combo timer x2</button></li>
+<li><button onclick="buyPickleUpgrade('clickBoost')">Salt &amp; Battery (3 🥒) - Double click value</button></li>
+<li><button onclick="buyPickleUpgrade('cosmetic')">Golden Spatula (5 🥒) - Cosmetic click effect</button></li>
+<li><button onclick="buyPickleUpgrade('relish')">Relish Mode (5 🥒) - +25% offline BPS</button></li>
+<li><button onclick="buyPickleUpgrade('quantum')">Quantum Fryer (10 🥒) - Double passive BPS</button></li>
+</ul>
+<button onclick="togglePickleShop()">❌ Close</button>
+</div>
+</div>
+</div>
+<div class="section">
+<button onclick="prestige()" style="background: linear-gradient(45deg, red, orange); color: white;
+      padding: 14px 30px; font-size: 1rem; border: none; border-radius: 12px;
+      box-shadow: 0 0 15px red;">🔥 Regrill the Multiverse</button>
+<p id="prestigeLevel" style="color: #ffb347; margin-top: 10px;">Prestige Level: 0</p>
+</div>
+<div class="section" id="purpleSection" style="display:block;">
+<button id="defeatPurple" style="background: linear-gradient(45deg, purple, violet); color: white; font-weight: bold;
+        border: none; padding: 16px 30px; border-radius: 10px; font-size: 1rem; box-shadow: 0 0 20px purple;">☠️ Stop the Purple Inconvenience (Cost: 500,000 🍔)</button>
+<p id="finalMessage" style="margin-top: 20px; color: #b9fbc0; display:none;">You saved the Burgerverse. Irony Man tips his helmet.</p>
+</div>
+<div class="section">
+<h2>🏆 Achievements</h2>
+<ul id="achievementList" style="list-style:none;"></ul>
+</div>
+<div id="achievementPopup">Achievement Unlocked!</div>
+
+<script>
+let burgers = 0, bps = 0, clicks = 0, combo = 0, lastClickTime = 0, totalBurgers = 0;
+let prestigeCount = 0, loreOpens = 0, purpleClicked = false;
+let pickleCoins = 0, dailyClaimed = false;
+const unlocked = new Set(), perks = [], discoveredLore = new Set();
+
+const heroes = {
+  'Arachnid Lad': { baseCost: 50, baseRate: 2, cost: 50, rate: 2, count: 0, level: 0, costume: '' },
+  'Thore': { baseCost: 150, baseRate: 6, cost: 150, rate: 6, count: 0, level: 0, costume: '' },
+  'Optimus Subprime': { baseCost: 300, baseRate: 12, cost: 300, rate: 12, count: 0, level: 0, costume: '' },
+  'Irony Man': { baseCost: 2500, baseRate: 100, cost: 2500, rate: 100, count: 0, level: 0, costume: '' },
+  'Compy Comrade': { baseCost: 4500, baseRate: 180, cost: 4500, rate: 180, count: 0, level: 0, costume: '' }
+};
+
+function updateUI() {
+  document.getElementById('burgerCount').innerText = Math.floor(burgers);
+  document.getElementById('bps').innerText = bps.toFixed(1);
+  document.getElementById('achievementCounter').innerText = `Achievements: ${unlocked.size} / 17`;
+  document.getElementById('prestigeLevel').innerText = `Prestige Level: ${prestigeCount}`;
+  if (document.getElementById('pickleDisplay')) {
+    document.getElementById('pickleDisplay').innerText = `Pickle Coins: 🥒 ${pickleCoins}`;
+  }
+}
+
+function checkAchievements() {
+  const list = document.getElementById('achievementList');
+  const achievements = [
+    { id: 'First Click', condition: () => clicks >= 1 },
+    { id: '100 Burgers', condition: () => burgers >= 100 },
+    { id: 'First Hero', condition: () => Object.values(heroes).some(h => h.count > 0) },
+    { id: '10 BPS', condition: () => bps >= 10 },
+    { id: 'Finger Cramp', condition: () => clicks >= 500 },
+    { id: 'Fancy Hat', condition: () => loreOpens >= 3 },
+    { id: 'Moo Mode', condition: () => clicks === 404 },
+    { id: 'Side Hustle', condition: () => bps > 50 && clicks > 0 },
+    { id: 'Hero Hoarder', condition: () => Object.values(heroes).every(h => h.count >= 10) },
+    { id: 'Overinvested', condition: () => burgers === 0 && heroes['Irony Man'].count > 0 },
+    { id: 'Chicken Run', condition: () => heroes['Arachnid Lad'].count === 1 && Object.values(heroes).filter(h => h.count > 0).length === 1 },
+    { id: 'Millionaire Taste', condition: () => totalBurgers >= 1000000 },
+    { id: 'Purple Patience', condition: () => burgers < 500000 && purpleClicked },
+    { id: 'Hot Dog Water', condition: () => burgers === 0 && purpleClicked },
+    { id: 'Bottomless Bun', condition: () => burgers === 12345 },
+    { id: 'Drama Llama', condition: () => loreOpens >= 10 },
+    { id: 'Spare Change', condition: () => burgers === 0 }
+  ];
+  achievements.forEach(a => {
+    if (!unlocked.has(a.id) && a.condition()) {
+      unlocked.add(a.id);
+      const li = document.createElement('li');
+      li.textContent = `✅ ${a.id}`;
+      document.getElementById('achievementList').appendChild(li);
+      const popup = document.getElementById('achievementPopup');
+      popup.innerText = `🏆 ${a.id}`;
+      popup.style.display = 'block';
+
+      const ironyLines = {
+        'First Click': "You clicked a burger. Einstein would be proud.",
+        '100 Burgers': "Wow. 100. You’re basically a burger tycoon now.",
+        'First Hero': "You hired someone? Delegating already? Lazy genius.",
+        '10 BPS': "10 BPS? You might dethrone McRonald's soon.",
+        'Finger Cramp': "Maybe take a break, your fingers are filing complaints.",
+        'Fancy Hat': "Reading lore? Nerd alert.",
+        'Moo Mode': "404 burgers not found. Nice bug-hunting.",
+        'Side Hustle': "Passive income? Look at you, Mr. Entrepreneur.",
+        'Hero Hoarder': "You officially own more employees than a startup.",
+        'Overinvested': "Broke but still hired Irony Man? Bold.",
+        'Chicken Run': "Just Arachnid Lad? Minimalist or masochist?",
+        'Millionaire Taste': "One million burgers? Send me a gold spatula.",
+        'Purple Patience': "Clicked early, didn’t you? Classic rookie move.",
+        'Hot Dog Water': "Zero burgers and you still challenged fate?",
+        'Bottomless Bun': "12345 burgers. OCD satisfied?",
+        'Drama Llama': "Lore junkie. I bet you read shampoo bottles too.",
+        'Spare Change': "Zero burgers? Inspirational. Really."
+      };
+      document.getElementById('chatline').innerText = ironyLines[a.id] || "Achievement unlocked. Try not to cry.";
+
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+  });
+}
+
+function recalculateBPS() {
+  bps = Object.values(heroes).reduce((total, h) => total + h.rate * h.count, 0);
+}
+
+function resetCombo() {
+  combo = 0;
+  document.getElementById('comboDisplay').innerText = "Combo: 0";
+}
+
+function updateCombo() {
+  const now = Date.now();
+  combo = now - lastClickTime < 1000 ? combo + 1 : 1;
+  lastClickTime = now;
+  document.getElementById('comboDisplay').innerText = "Combo: " + combo;
+  clearTimeout(window.comboTimeout);
+  window.comboTimeout = setTimeout(resetCombo, 1500);
+}
+
+function renderShop() {
+  const shop = document.getElementById('heroShop');
+  shop.innerHTML = '<div id="achievementCounter" style="margin-bottom: 10px; font-weight: bold; color: #fff;">Achievements: ' + unlocked.size + ' / 17</div><h2>Hero Shop</h2>';
+  for (const [name, hero] of Object.entries(heroes)) {
+    const card = document.createElement('div');
+    card.className = 'hero-card';
+    const upgradeCost = Math.floor(hero.baseCost * (hero.level + 1) * 1.5);
+    card.innerHTML = `
+      <h4>${name}</h4>
+      <p>Cost: ${hero.cost} 🍔</p>
+      <p>+${(hero.rate * hero.count).toFixed(1)} BPS</p>
+      <p>Owned: ${hero.count}</p>
+      <p>Level: ${hero.level}</p>
+      <p>${hero.costume}</p>
+    `;
+    const hireBtn = document.createElement('button');
+    hireBtn.textContent = 'Hire ' + name;
+    hireBtn.onclick = () => {
+      if (burgers >= hero.cost) {
+        burgers -= hero.cost;
+        hero.count++;
+        hero.cost = Math.floor(hero.cost * 1.15);
+        recalculateBPS();
+        renderShop();
+        updateUI();
+        checkAchievements();
+      }
+    };
+    const upgradeBtn = document.createElement('button');
+    upgradeBtn.textContent = 'Upgrade (' + upgradeCost + ' 🍔)';
+    upgradeBtn.onclick = () => {
+      if (burgers >= upgradeCost) {
+        burgers -= upgradeCost;
+        hero.level++;
+        hero.rate = hero.baseRate * (1 + hero.level * 0.5);
+        if (hero.level >= 5 && !hero.costume) {
+          hero.costume = '⭐ Costume Unlocked!';
+        }
+        recalculateBPS();
+        renderShop();
+        updateUI();
+        checkAchievements();
+      }
+    };
+    card.appendChild(hireBtn);
+    card.appendChild(upgradeBtn);
+    shop.appendChild(card);
+  }
+}
+
+function claimDaily() {
+  if (dailyClaimed) {
+    alert("You've already claimed today's reward!");
+  } else {
+    burgers += 500;
+    pickleCoins += 1;
+    dailyClaimed = true;
+    alert("🍔 +500 Burgers & 🥒 +1 Pickle Coin!");
+    updateUI();
+  }
+}
+
+function prestige() {
+  if (totalBurgers >= 100000) {
+    pickleCoins += 10;
+    prestigeCount++;
+    burgers = 0; bps = 0; clicks = 0; totalBurgers = 0;
+    for (const h of Object.values(heroes)) {
+      h.count = 0;
+      h.level = 0;
+      h.cost = h.baseCost;
+      h.rate = h.baseRate;
+      h.costume = '';
+    }
+    unlocked.clear();
+    document.getElementById('achievementList').innerHTML = '';
+    document.body.style.background = 'radial-gradient(circle at top, #2f004f, #000)';
+    renderShop();
+    updateUI();
+    alert("🔥 Prestige Activated! Visuals Updated.");
+  } else {
+    alert("Earn 100,000 total burgers to Regrill the Multiverse!");
+  }
+}
+
+document.getElementById('clickBurger').onclick = () => {
+  burgers++;
+  totalBurgers++;
+  clicks++;
+  updateCombo();
+  updateUI();
+  checkAchievements();
+};
+
+document.getElementById('showLore').onclick = () => {
+  document.getElementById('loreOverlay').style.display = 'flex';
+  loreOpens++;
+  checkAchievements();
+};
+
+document.getElementById('defeatPurple').onclick = () => {
+  if (burgers >= 500000) {
+    burgers -= 500000;
+    purpleClicked = true;
+    document.body.style.background = 'radial-gradient(circle at center, #4b0082, #000)';
+    document.getElementById('finalMessage').style.display = 'block';
+    document.getElementById('clickBurger').disabled = true;
+    Object.values(heroes).forEach(h => h.rate = 0);
+    recalculateBPS();
+    document.getElementById('chatline').innerText = "Well played, burger warrior.";
+  } else {
+    purpleClicked = true;
+    alert("You need 500,000 burgers to stop the Purple Inconvenience.");
+  }
+  checkAchievements();
+};
+
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey && e.altKey && e.key === "P") {
+    pickleCoins += 10;
+    alert("🥒 CHEAT ACTIVATED: +10 Pickle Coins");
+    updateUI();
+  }
+});
+
+setInterval(() => {
+  burgers += bps / 10;
+  totalBurgers += bps / 10;
+  updateUI();
+  checkAchievements();
+}, 100);
+
+window.onload = () => {
+  const statBox = document.createElement("div");
+  statBox.innerHTML = '<p id="pickleDisplay" style="color:#a0ffce; font-size:1rem;">Pickle Coins: 🥒 0</p><button onclick="claimDaily()" style="margin:10px;padding:10px;">🎁 Claim Daily Reward</button>';
+  document.body.insertBefore(statBox, document.querySelector(".section"));
+  renderShop();
+  updateUI();
+};
+
+let pickleUpgrades = {
+  bpsBoost: false,
+  comboBoost: false,
+  clickBoost: false,
+  cosmetic: false,
+  relish: false,
+  quantum: false
+};
+
+function togglePickleShop() {
+  const el = document.getElementById('pickleShopOverlay');
+  el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function buyPickleUpgrade(type) {
+  const costs = {
+    bpsBoost: 1,
+    comboBoost: 2,
+    clickBoost: 3,
+    cosmetic: 5,
+    relish: 5,
+    quantum: 10
+  };
+  if (pickleCoins >= costs[type] && !pickleUpgrades[type]) {
+    pickleCoins -= costs[type];
+    pickleUpgrades[type] = true;
+    alert('✅ Upgrade Purchased!');
+    if (type === 'bpsBoost') {
+      bps *= 1.10;
+    } else if (type === 'comboBoost') {
+      window.comboTimeoutDuration = 3000;
+    } else if (type === 'clickBoost') {
+      window.clickBoostActive = true;
+    } else if (type === 'cosmetic') {
+      document.getElementById('clickBurger').style.boxShadow = '0 0 25px gold';
+    } else if (type === 'relish') {
+      window.relishActive = true;
+    } else if (type === 'quantum') {
+      bps *= 2;
+    }
+    updateUI();
+  } else {
+    alert("Not enough Pickle Coins or already purchased.");
+  }
+}
+
+</script></body>
+</html>
